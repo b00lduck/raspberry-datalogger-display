@@ -91,7 +91,8 @@ func (p *GasPage) Process() bool {
 
 	var contents []byte
 
-	response, err := http.Get("http://localhost:8080/counter/GAS_1")
+        dataservice := os.Getenv("DATASERVICE_HOST")
+	response, err := http.Get("http://" + dataservice + "/counter/GAS_1")
 	if err != nil {
 		fmt.Println(err)
 		return false
