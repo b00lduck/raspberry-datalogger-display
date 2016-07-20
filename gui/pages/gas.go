@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"encoding/json"
 	"io/ioutil"
+	"os"
 	"github.com/b00lduck/raspberry-datalogger-dataservice-orm"
         "github.com/b00lduck/raspberry-datalogger-dataservice-client"
 )
