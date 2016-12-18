@@ -4,12 +4,8 @@ import (
 	"image/draw"
 	"image"
 	"strconv"
-	"net/http"
-	"encoding/json"
-	"io/ioutil"
-	"os"
-	"github.com/b00lduck/raspberry-datalogger-dataservice-orm"
-        "github.com/b00lduck/raspberry-datalogger-dataservice-client"
+    log "github.com/Sirupsen/logrus"
+    "github.com/b00lduck/raspberry-datalogger-dataservice-client"
 )
 
 type GasPage struct {
@@ -21,7 +17,7 @@ type GasPage struct {
 
 func NewGasPage() Page {
 
-	fmt.Println("CREATE GAS PAGE")
+	log.Info("Creating GAS page")
 
 	arrowUp := LoadImage("arrow_up.gif")
 	arrowDown := LoadImage("arrow_down.gif")
@@ -89,32 +85,15 @@ func (p *GasPage) Draw(target *draw.Image) {
 }
 
 func (p *GasPage) Process() bool {
-
-	var contents []byte
-
-        dataservice := os.Getenv("DATASERVICE_HOST")
-	response, err := http.Get("http://" + dataservice + "/counter/GAS_1")
-	if err != nil {
-		fmt.Println(err)
-		return false
-	}
-
-	defer response.Body.Close()
-	contents, err = ioutil.ReadAll(response.Body)
-	if err != nil {
-		fmt.Println(err)
-		return false
-	}
-
-	counter := orm.Counter{}
-	err = json.Unmarshal(contents, &counter)
-	if err != nil {
-		fmt.Println(err)
-		return false
-	}
-
-	p.Counter = int32(counter.Reading)
-
+	c, err := client.GetCounter("gas_usage")
+    if err != nil {
+        log.Error(err)
+    }
+    ic, err := strconv.Atoi(c)
+    if err != nil {
+        log.Error(err)
+    }
+    p.Counter = int32(ic)
 	return true
 }
 
@@ -140,7 +119,7 @@ func (p *GasPage) changeCounter(digit int, direction bool) {
 		}
 	}
 
-	client.SendCounterCorrection("GAS_1", p.Counter)
+	client.SendCounterCorrection("gas_usage", p.Counter)
 
 	*(p.BasePage.DirtyChan) <- true
 
