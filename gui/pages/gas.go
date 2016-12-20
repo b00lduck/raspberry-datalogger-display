@@ -6,7 +6,6 @@ import (
 	"strconv"
     log "github.com/Sirupsen/logrus"
     "github.com/b00lduck/raspberry-datalogger-dataservice-client"
-    "github.com/b00lduck/raspberry-datalogger-display/tools"
     "math"
 )
 
