@@ -6,6 +6,8 @@ import (
 	"strconv"
     log "github.com/Sirupsen/logrus"
     "github.com/b00lduck/raspberry-datalogger-dataservice-client"
+    "github.com/b00lduck/raspberry-datalogger-display/tools"
+    "math"
 )
 
 type GasPage struct {
@@ -89,11 +91,12 @@ func (p *GasPage) Process() bool {
     if err != nil {
         log.Error(err)
     }
-    ic, err := strconv.Atoi(c)
+    ic, err := strconv.ParseFloat(c, 64)
     if err != nil {
         log.Error(err)
     }
-    p.Counter = int32(ic)
+
+    p.Counter = int32(math.Floor(ic + .5))
 	return true
 }
 
