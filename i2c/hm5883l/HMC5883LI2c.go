@@ -1,6 +1,6 @@
 package hmc5883l
 import (
-	"b00lduck/datalogger/display/i2c"
+	"github.com/b00lduck/raspberry-datalogger-display/i2c"
 	"unsafe"
 )
 
